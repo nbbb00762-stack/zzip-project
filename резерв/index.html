@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Showcase — Танымал брендтердің гаджеттері</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="Изображение WhatsApp 2025-11-12 в 13.20.11_910b779c.jpg" type="image/jpeg">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+
+</head>
+<body class="dark">
+    <!-- Custom cursor elements -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+    <div id="cursor-follower" class="cursor-follower"></div>
+    <div class="min-h-screen text-white">
+        <!-- Spotlight effect element -->
+        <div id="spotlight" class="spotlight"></div>
+        <!-- Navigation -->
+        <nav class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+            <div class="container mx-auto px-6">
+                <div class="flex items-center justify-between h-12">
+                    <div class="flex items-center space-x-8">
+                        <!-- Generic site logo/text -->
+                        <a href="#" class="text-xl font-bold tracking-wider">Tech.</a>
+                        <div class="hidden md:flex space-x-6 text-xs">
+                            <a href="iphone.html" class="nav-link hover:text-white/70 transition">iPhone</a>
+                            <a href="samsung.html" class="nav-link hover:text-white/70 transition">Samsung</a>
+                            <a href="xiaomi.html" class="nav-link hover:text-white/70 transition">Xiaomi</a>
+                            <a href="oppo.html" class="nav-link hover:text-white/70 transition">OPPO</a>
+                           
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="nav-button transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </button>
+                        <button id="register-btn" class="nav-button transition" aria-haspopup="dialog" aria-controls="registration-modal">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </button>
+                        <a href="cart.html" class="nav-button transition relative" title="Себет">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            <span class="cart-counter">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Registration Modal (hidden by default) -->
+        <div id="registration-modal" class="modal-overlay" aria-hidden="true" style="display:none;">
+            <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="reg-title">
+                <button id="reg-close" class="modal-close" aria-label="Close">×</button>
+                <h3 id="reg-title" class="text-2xl font-semibold mb-4">Тіркелу</h3>
+                <form id="reg-form">
+                    <label class="block mb-2 text-sm">Аты-жөні</label>
+                    <input id="reg-name" type="text" class="modal-input mb-3" required />
+
+                    <label class="block mb-2 text-sm">Электрондық пошта</label>
+                    <input id="reg-email" type="email" class="modal-input mb-3" required />
+
+                    <label class="block mb-2 text-sm">Құпия сөз</label>
+                    <input id="reg-password" type="password" class="modal-input mb-3" required minlength="6" />
+
+                    <div id="reg-error" class="text-sm text-red-400 mb-3" style="display:none;"></div>
+
+                    <div class="flex items-center gap-3">
+                        <button type="submit" id="reg-submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Тіркелу</button>
+                        <button type="button" id="reg-cancel" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full">Болдырмау</button>
+                    </div>
+                    <div id="reg-success" class="text-sm text-green-400 mt-4" style="display:none;">Тіркелу сәтті аяқталды!</div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <section id="hero-section" class="pb-12 text-center">
+            <!-- Full-bleed video at the top of the section -->
+            <div class="video-container mb-8">
+                <!-- Hero video -->
+                <video 
+                    autoplay 
+                    muted 
+                    loop 
+                    playsinline
+                    class="w-full h-auto video-player"
+                    poster="https://images.pexels.com/photos/1029757/pexels-photo-1029757.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                >
+                    <source src="https://www.apple.com/assets-www/en_WW/mac/welcome/x4fa4f3ce9_large.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="container mx-auto px-6">
+                    <div class="slide-up-big" data-animation-target="hero-section">
+                    <p class="text-lg mb-2 text-white/80">Үздік гаджеттер</p>
+                    <h1 class="text-5xl md:text-7xl font-semibold mb-6 hero-title">
+                        <span class="gradient-text">Гаджеттер интернет-дүкені</span>
+                    </h1>
+
+                    <div class="flex items-center justify-center gap-2 mb-4">
+                        <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        <p class="text-sm text-white/70">Әртүрлі өндірушілерден салыстырулар, шолулар мен ұсыныстар</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Take a closer look section -->
+        <section id="closer-look-section" class="py-20 bg-gradient-to-b from-black to-gray-900">
+            <div class="container mx-auto px-6">
+                <div class="slide-up-big" data-animation-target="closer-look-section">
+                   
+                    <div class="max-w-3xl mx-auto">
+                        <!-- Placeholder for image -->
+                        <img id="closer-image"
+                            src="https://www.apple.com/v/ipad-pro/av/images/overview/ipados/hero_left__cfj9zuqxxr36_large.png"
+                            alt="iPhone 17 Pro"
+                            class="w-full h-auto rounded-2xl shadow-2xl closer-image"
+                        />
+                        <div class="flex justify-center gap-4 mt-8">
+                            <button id="closer-prev" class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                            <button id="closer-next" class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance & Chips Section -->
+        <section id="m4-section" class="py-20 bg-black">
+            <!-- Background Video -->
+            <video autoplay muted loop playsinline class="section-bg-video">
+                <source src="https://images.samsung.com/kz_ru/smartphones/galaxy-z-fold7/videos/galaxy-z-fold7-features-unveiling-mo.webm?imbypass=true" type="video/mp4">
+            </video>
+            <div class="section-overlay"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+                    <div class="fade-in-left" data-animation-target="m4-section-left">
+                        <div class="flex items-center gap-4 mb-6">
+                            <!-- White circle removed as requested -->
+                            <div class="text-6xl font-bold">Өнімділік</div>
+                        </div>
+                        <h3 class="text-4xl font-semibold mb-6">Кез келген тапсырмаға арналған қуатты процессорлар</h3>
+                        <p class="text-lg text-white/70 mb-6">
+                            Заманауи процессорлар рендерингте, монтаж бен ойындарда айтарлықтай жылдамдық береді. Қажетіңізге қарай конфигурацияны таңдаңыз — энергия үнемдеушіден бастап жұмыс станкаларына дейін.
+                        </p>
+                        <p class="text-white/70 mb-4">
+                            CPU және GPU сипаттамаларын, энергия тиімділігін және нақты тапсырмалардағы өнімділікті салыстырыңыз.
+                        </p>
+                        <div class="space-y-4 mt-8">
+                            <div class="bg-white/5 p-6 rounded-xl border border-white/10 rotate-in stagger-1" data-animation-target="m4-stat-1">
+                                <p class="text-3xl font-bold mb-2">Өнімділік</p>
+                                <p class="text-sm text-white/60">шығармашылық және кәсіптік тапсырмалар үшін</p>
+                            </div>
+                            <div class="bg-white/5 p-6 rounded-xl border border-white/10 rotate-in stagger-2" data-animation-target="m4-stat-2">
+                                <p class="text-3xl font-bold mb-2">Энергия тиімділігі</p>
+                                <p class="text-sm text-white/60">сол тапсырмаларда батарея ұзақ қызмет етеді</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative fade-in-right" data-animation-target="m4-section-right" style="min-height: 400px;">
+                        <!-- This div is now a spacer, the video is in the background -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Graphics Section -->
+        <section id="graphics-section" class="py-20 bg-gradient-to-b from-gray-900 to-black">
+            <div class="container mx-auto px-6">
+                <div class="slide-up-big" data-animation-target="graphics-section-main">
+                    <h2 class="text-4xl md:text-5xl font-semibold mb-4 text-center">
+                        Келесі буын графикасы
+                    </h2>
+                    <p class="text-xl text-center text-white/70 mb-12">Өнімділік. Ойындарға дайын болыңыз.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto mb-12">
+                        <div class="relative overflow-hidden rounded-2xl group scale-in stagger-1" data-animation-target="graphics-card-1">
+                            <!-- Placeholder for image -->
+                               <video
+                                autoplay
+                                muted
+                                loop
+                                playsinline                                
+                                class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-105 rounded-2xl"
+                            >
+                                <source src="https://images.samsung.com/is/content/samsung/p6pim/kz_ru/feature/166434316/kz_ru-feature-immerse-yourself-in-breathtaking-detail-548470907.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="relative overflow-hidden rounded-2xl group scale-in stagger-2" data-animation-target="graphics-card-2">
+                            <!-- Video (replacing placeholder image) -->
+                            <video
+                                autoplay
+                                muted
+                                loop
+                                playsinline                                
+                                class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-105 rounded-2xl"
+                            >
+                                <source src="https://www.apple.com/105/media/ww/iphone/family/2025/e7ff365a-cb59-4ce9-9cdf-4cb965455b69/anim/welcome/xlarge_2x.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
+                                <p class="text-xl font-semibold">Кәсіби видеомонтаж</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="max-w-4xl mx-auto text-center">
+                        <p class="text-white/70 leading-relaxed">
+                            Сіздің графикаға бай жұмыс процестеріңіз қазіргі GPU және аппараттық жеделдету арқасында өнімділігі айтарлықтай өседі. Бұл ойындарда, 3D‑рендерде және видеомонтажда жақсы нәтиже береді және энергия тиімділігін сақтайды.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Apple Pencil Pro Section -->
+        <section id="pencil-section" class="py-20 bg-black">
+            <div class="container mx-auto px-6 text-center">
+                <div class="fade-in" data-animation-target="pencil-section">
+                    <h2 class="text-4xl md:text-5xl font-semibold mb-6">Apple Pencil Pro.</h2>
+                    <p class="text-xl text-white/70 max-w-2xl mx-auto mb-12">
+                        Инженерлік ғажайыптар арманыңызды жүзеге асырады. Жаңа мүмкіндіктермен танысыңыз.
+                    </p>
+                    <img 
+                        src="https://www.apple.com/v/ipad-pro/av/images/overview/apple-pencil-pro/pencil_hero__ic0kxncvq6my_large.jpg" 
+                        alt="Apple Pencil Pro"
+                        class="w-full max-w-4xl mx-auto pencil-image"
+                    />
+                </div>
+            </div>
+        </section>
+
+        <!-- Impossibly Thin Section -->
+        <section id="thin-section" class="py-20 bg-black text-center">
+            <div class="container mx-auto px-6">
+                <div class="fade-in" data-animation-target="thin-section">
+                    
+                    <p class="text-5xl md:text-7xl font-bold gradient-text mb-12">Экранның ең жақсы сапасы.</p>
+                    <!-- Container for the 3D model canvas -->
+                    <div id="parallax-container" class="thin-3d-container">
+                        <div class="flex justify-center items-center">
+                                <div class="phone-frame mx-auto">
+                                    <!-- This wrapper defines the visible phone image (frame) on top -->
+                                    <img src="https://www.apple.com/v/iphone-17-pro/d/images/overview/cameras/pro-video/video_hw__blfqisph35yu_large.png" alt="Phone frame" class="phone-frame__image"/>
+
+                                    <!-- Screen area: positioned absolutely to sit under the frame and clipped by overflow -->
+                                    <div class="phone-screen" aria-hidden="true">
+                                        <video autoplay muted loop playsinline class="phone-screen__video">
+                                            <source src="https://i02.appmifile.com/mi-com-product/fly-birds/xiaomi-15t-pro/pc/pc12_leica_sum_optical.mp4" type="video/mp4">
+                                        </video>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="display-section" class="py-20 bg-black">
+            <div class="container mx-auto px-6">
+                <div data-animation-target="display-section-main">
+                    <h2 class="text-4xl md:text-5xl font-semibold mb-12 text-center rotate-in" data-animation-target="display-title">
+                        Барлығын жаңа қырынан көріңіз.
+                    </h2>
+                    
+                    <div class="max-w-5xl mx-auto mb-12 scale-in" data-animation-target="display-image">
+                        <!-- Placeholder for image -->
+                        <img 
+                            src="https://www.apple.com/v/ipad-pro/av/images/overview/intelligence/hero__mdl3lpkglcia_large.jpg" 
+                            alt="Device Display" 
+                            class="w-full h-auto rounded-2xl shadow-2xl"
+                        />
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <div class="bg-white/5 p-8 rounded-2xl border border-white/10 fade-in-left stagger-1" data-animation-target="display-card-1">
+                            <svg class="w-12 h-12 mb-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            <h3 class="text-2xl font-semibold mb-3">Жарқын HDR дисплей</h3>
+                            <p class="text-white/70">
+                                Жоғары динамикалық диапазонды дисплей түстерді айқын көрсетіп, терең қара түстерді қайтарады — контентті жаңа деңгейде көруге мүмкіндік береді.
+                            </p>
+                        </div>
+
+                        <div class="bg-white/5 p-8 rounded-2xl border border-white/10 fade-in-right stagger-2" data-animation-target="display-card-2">
+                            <svg class="w-12 h-12 mb-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                            </svg>
+                            <h3 class="text-2xl font-semibold mb-3">Адаптивті жаңарту жиілігі</h3>
+                            <p class="text-white/70">
+                                Адаптивті жаңарту жиілігі интерфейс пен ойындарды бірқалыпты етеді, ал батареяны үнемдеуге көмектеседі.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upgrade Section -->
+        <section id="upgrade-section" class="py-20 bg-gradient-to-b from-black to-gray-900">
+            <div class="container mx-auto px-6">
+                <div data-animation-target="upgrade-section-main">
+                    <div class="rotate-in" data-animation-target="upgrade-title-1">
+                        <h2 class="text-4xl md:text-5xl font-semibold mb-4 text-center">
+                            Енді жаңарту уақыты
+                        </h2>
+                        <p class="text-center text-white/70 mb-12">Әртүрлі өндірушілердің жаңа құрылғыларынан не алатыныңыз.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                        <div class="bg-gradient-to-br from-orange-500/20 to-pink-500/20 p-8 rounded-2xl border border-orange-500/30 scale-in stagger-1" data-animation-target="upgrade-card-1">
+                            <h3 class="text-2xl font-semibold mb-4">
+                                Қиын тапсырмаларды 8,8 есеге дейін жылдамырақ орындаңыз.
+                            </h3>
+                            <p class="text-white/70">
+                                    Заманауи процессорлар фото мен видеоны өңдеу, 3D‑рендеринг және басқа талапты тапсырмаларды жылдамырақ орындауға көмектеседі, ал батарея ұзақ жүреді.
+                                </p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-green-500/20 to-blue-500/20 p-8 rounded-2xl border border-green-500/30 scale-in stagger-2" data-animation-target="upgrade-card-2">
+                            <div class="flex items-center gap-3 mb-4">
+                                <svg class="w-8 h-8 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                                </svg>
+                                        <h3 class="text-2xl font-semibold">
+                                            Ақылды мүмкіндіктер мен қауіпсіздік.
+                                        </h3>
+                            </div>
+                            <p class="text-white/70">
+                                Ақылды функциялар күнделікті тапсырмаларды автоматтандыруға, деректеріңізді қорғауға және күнделікті әрекеттерді жеңілдетуге көмектеседі — өндірушілер әртүрлі тәсілдер ұсынады.
+                            </p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-purple-500/20 to-indigo-500/20 p-8 rounded-2xl border border-purple-500/30 scale-in stagger-3" data-animation-target="upgrade-card-3">
+                            <div class="flex items-center gap-3 mb-4">
+                                <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                <h3 class="text-2xl font-semibold">
+                                    Ғажайып XDR дисплей.
+                                </h3>
+                            </div>
+                                <p class="text-white/70">
+                                HDR контент үшін жоғары жарықтық пен кең динамикалық диапазон тәжірибесін сезініңіз.
+                            </p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-8 rounded-2xl border border-blue-500/30 scale-in stagger-4" data-animation-target="upgrade-card-4">
+                            <div class="flex items-center gap-3 mb-4">
+                                <svg class="w-8 h-8 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+                                </svg>
+                                <h3 class="text-2xl font-semibold">
+                                    Ұзақ автономды жұмыс уақыты
+                                </h3>
+                            </div>
+                            <p class="text-white/70">
+                                Күн бойы жұмыс істеуге арналған ұзақ уақыттық батарея жұмысы — шынайы пайдалануда ұзақ қызмет етеді.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-12 slide-up-big" data-animation-target="upgrade-button">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-full button-pulse">
+                            Өнімдерді зерттеңіз
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-black border-t border-white/10 py-8 fade-in">
+            <div class="container mx-auto px-6">
+                <div class="text-center text-sm text-white/50">
+                    <p class="mb-2">* Бағалар мен акциялар сатушыға байланысты. Шарттар қолданылуы мүмкін.</p>
+                    <p>© 2025 Tech Showcase. Барлық құқықтар қорғалған.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+    <script src="cart.js"></script>
+    <script>
+        // Parallax effect for the "thin" section
+        function setupParallaxEffect() {
+            const container = document.getElementById('parallax-container');
+            if (!container) return;
+
+            container.addEventListener('mousemove', (e) => {
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const moveX = (x - rect.width / 2) / (rect.width / 2);
+                const moveY = (y - rect.height / 2) / (rect.height / 2);
+
+                container.querySelectorAll('.parallax-layer').forEach(layer => {
+                    const speed = layer.classList.contains('layer-fg') ? -15 : (layer.classList.contains('layer-mid') ? -8 : -3);
+                    layer.style.transform = `translateX(${moveX * speed}px) translateY(${moveY * speed}px)`;
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupParallaxEffect();
+        });
+    </script>
+    
+ </body>
+ </html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Xiaomi — Гаджеттер дүкені</title>
+  <link rel="stylesheet" href="styles-samsung.css">
+      <style>
+    /* --- Custom Cursor Styles --- */
+    body, a, button, input {
+        cursor: none; /* Hide the default system cursor */
+    }
+
+    .custom-cursor, .cursor-follower {
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+
+    .custom-cursor {
+        width: 8px;
+        height: 8px;
+        background-color: #fff;
+        transition: transform 0.1s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .cursor-follower {
+        width: 30px;
+        height: 30px;
+        background-color: rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    /* State when hovering over interactive elements */
+    .cursor-grow .cursor-follower {
+        transform: translate(-50%, -50%) scale(1.5);
+        background-color: rgba(59, 130, 246, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom cursor elements -->
+  <div id="custom-cursor" class="custom-cursor"></div>
+  <div id="cursor-follower" class="cursor-follower"></div>
+  <header>
+    <div class="logo">
+      <div class="badge">X</div>
+      <div>
+        <h1>Xiaomi бөлімі</h1>
+        <div class="subtitle">Тауарлар</div>
+      </div>
+    </div>
+      <!-- Spotlight effect element -->
+    <div id="spotlight" class="spotlight"></div>
+
+
+    <div class="meta">
+      <div class="search" role="search">
+        <input id="q" placeholder="Поиск Xiaomi..." />
+      </div>
+      <div style="width:8px"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="title">
+        <h2>Xiaomi бөлімі</h2>
+      </div>
+    </section>
+
+    <div class="filters" id="filters">
+      <div class="chip active" data-filter="all" onclick="filterBy('all', this)">Барлығы</div>
+      <div class="chip" data-filter="phones" onclick="filterBy('phones', this)">Телефоны</div>
+      <div class="chip" data-filter="tablets" onclick="filterBy('tablets', this)">Планшеты</div>
+      <div class="chip" data-filter="watches" onclick="filterBy('watches', this)">Xiaomi Watch</div>
+      <div class="chip" data-filter="buds" onclick="filterBy('buds', this)">Xiaomi Buds</div>
+      <div style="flex:1"></div>
+      <div class="note">Цены approx. — источники: Xiaomi / AliExpress / новости.</div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <footer>Цены и наличие обновляются регулярно.</footer>
+
+  <script src="script-xiaomi.js"></script>
+      <script>
+    // Custom cursor logic
+    function setupCustomCursor() {
+        const cursor = document.getElementById('custom-cursor');
+        const follower = document.getElementById('cursor-follower');
+        if (!cursor || !follower) return;
+
+        let mouseX = 0, mouseY = 0;
+        let followerX = 0, followerY = 0;
+        const speed = 0.1; // How fast the follower catches up
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursor.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
+        });
+
+        function animateFollower() {
+            followerX += (mouseX - followerX) * speed;
+            followerY += (mouseY - followerY) * speed;
+            follower.style.transform = `translate(${followerX}px, ${followerY}px)`;
+            requestAnimationFrame(animateFollower);
+        }
+        animateFollower();
+
+        // Add hover effect on interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, input, [role="button"], .chip');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-grow'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-grow'));
+        });
+    }
+
+    // Spotlight effect that follows the mouse
+    function setupSpotlightEffect() {
+        const spotlight = document.getElementById('spotlight');
+        if (!spotlight) return;
+
+        document.addEventListener('mousemove', (e) => {
+            // Use requestAnimationFrame for performance
+            requestAnimationFrame(() => {
+                spotlight.style.left = `${e.clientX}px`;
+                spotlight.style.top = `${e.clientY}px`;
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setupCustomCursor();
+        setupSpotlightEffect();
+    });
+  </script>
+  <style>
+    /* Spotlight effect that follows the cursor */
+    .spotlight {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 70%);
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 100;
+    }
+  </style>
+</body>
+</html>
